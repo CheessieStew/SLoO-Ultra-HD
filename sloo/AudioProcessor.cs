@@ -14,6 +14,9 @@
         private Plugin _plugin;
         private Random _rng = new Random();
 
+
+
+
         /// <summary>
         /// Constructs a new instance.
         /// </summary>
@@ -22,6 +25,8 @@
             : base(2, 2, 0)
         {
             _plugin = plugin;
+
+
         }
 
         public override void Process(VstAudioBuffer[] inChannels, VstAudioBuffer[] outChannels)

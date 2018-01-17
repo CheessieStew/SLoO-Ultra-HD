@@ -9,7 +9,7 @@
             Implements the audio processing of the plugin using the <see cref="T:Jacobi.Vst.Samples.MidiNoteSampler.SampleManager"/>.
             </summary>
         </member>
-        <member name="M:Jacobi.Vst.Samples.MidiNoteSampler.AudioProcessor.#ctor(Jacobi.Vst.Samples.MidiNoteSampler.Plugin)">
+        <member name="M:Jacobi.Vst.Samples.MidiNoteSampler.AudioProcessor.#ctor(sloo.Plugin)">
             <summary>
             Constructs a new instance.
             </summary>
@@ -20,7 +20,7 @@
             Manages incoming midi events and sents them to the <see cref="T:Jacobi.Vst.Samples.MidiNoteSampler.SampleManager"/>.
             </summary>
         </member>
-        <member name="M:Jacobi.Vst.Samples.MidiNoteSampler.MidiProcessor.#ctor(Jacobi.Vst.Samples.MidiNoteSampler.Plugin)">
+        <member name="M:Jacobi.Vst.Samples.MidiNoteSampler.MidiProcessor.#ctor(sloo.Plugin)">
             <summary>
             Constructs a new instance.
             </summary>
@@ -36,35 +36,6 @@
             Handles and filters the incoming midi events.
             </summary>
             <param name="events">The midi events for the current cycle.</param>
-        </member>
-        <member name="T:Jacobi.Vst.Samples.MidiNoteSampler.Plugin">
-            <summary>
-            The Plugin root class that derives from the framework provided base class that also include the interface manager.
-            </summary>
-        </member>
-        <member name="M:Jacobi.Vst.Samples.MidiNoteSampler.Plugin.#ctor">
-            <summary>
-            Constructs a new instance.
-            </summary>
-        </member>
-        <member name="P:Jacobi.Vst.Samples.MidiNoteSampler.Plugin.SampleManager">
-            <summary>
-            Gets the sample manager.
-            </summary>
-        </member>
-        <member name="M:Jacobi.Vst.Samples.MidiNoteSampler.Plugin.CreateAudioProcessor(Jacobi.Vst.Framework.IVstPluginAudioProcessor)">
-            <summary>
-            Creates a default instance and reuses that for all threads.
-            </summary>
-            <param name="instance">A reference to the default instance or null.</param>
-            <returns>Returns the default instance.</returns>
-        </member>
-        <member name="M:Jacobi.Vst.Samples.MidiNoteSampler.Plugin.CreateMidiProcessor(Jacobi.Vst.Framework.IVstMidiProcessor)">
-            <summary>
-            Creates a default instance and reuses that for all threads.
-            </summary>
-            <param name="instance">A reference to the default instance or null.</param>
-            <returns>Returns the default instance.</returns>
         </member>
         <member name="T:Jacobi.Vst.Samples.MidiNoteSampler.PluginCommandStub">
             <summary>
@@ -143,6 +114,76 @@
             <summary>
             InitializeComponent
             </summary>
+        </member>
+        <member name="T:sloo.Plugin">
+            <summary>
+            The Plugin root class that derives from the framework provided base class that also include the interface manager.
+            </summary>
+        </member>
+        <member name="M:sloo.Plugin.#ctor">
+            <summary>
+            Constructs a new instance.
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:sloo.Plugin._volumeMngr_PropertyChanged(System.Object,System.ComponentModel.PropertyChangedEventArgs)" -->
+        <member name="P:sloo.Plugin.SampleManager">
+            <summary>
+            Gets the sample manager.
+            </summary>
+        </member>
+        <member name="M:sloo.Plugin.CreateAudioProcessor(Jacobi.Vst.Framework.IVstPluginAudioProcessor)">
+            <summary>
+            Creates a default instance and reuses that for all threads.
+            </summary>
+            <param name="instance">A reference to the default instance or null.</param>
+            <returns>Returns the default instance.</returns>
+        </member>
+        <member name="M:sloo.Plugin.CreateMidiProcessor(Jacobi.Vst.Framework.IVstMidiProcessor)">
+            <summary>
+            Creates a default instance and reuses that for all threads.
+            </summary>
+            <param name="instance">A reference to the default instance or null.</param>
+            <returns>Returns the default instance.</returns>
+        </member>
+        <member name="T:sloo.PluginParameterFactory">
+            <summary>
+            This class manages all parameters used by the plugin.
+            </summary>
+        </member>
+        <member name="F:sloo.PluginParameterFactory.Categories">
+            <summary>
+            A collection of parameter categories.
+            </summary>
+        </member>
+        <member name="F:sloo.PluginParameterFactory.ParameterInfos">
+            <summary>
+            A collection of parameter definitions.
+            </summary>
+        </member>
+        <member name="M:sloo.PluginParameterFactory.#ctor">
+            <summary>
+            Initializes the new instance.
+            </summary>
+        </member>
+        <member name="M:sloo.PluginParameterFactory.CreateParameters(Jacobi.Vst.Framework.VstParameterCollection)">
+            <summary>
+            Fills the <paramref name="parameters"/> collection with all parameters.
+            </summary>
+            <param name="parameters">Must not be null.</param>
+            <remarks>A <see cref="T:Jacobi.Vst.Framework.VstParameter"/> instance is created and linked up for each
+            <see cref="T:Jacobi.Vst.Framework.VstParameterInfo"/> instance found in the <see cref="F:sloo.PluginParameterFactory.ParameterInfos"/> collection.</remarks>
+        </member>
+        <member name="M:sloo.PluginPrograms.#ctor(sloo.Plugin)">
+            <summary>
+            Constructs a new instance.
+            </summary>
+            <param name="plugin">Must not be null.</param>
+        </member>
+        <member name="M:sloo.PluginPrograms.CreateProgramCollection">
+            <summary>
+            Initializes the plugin program collection.
+            </summary>
+            <returns>A filled program collection.</returns>
         </member>
         <member name="T:sloo.WpfControlWrapper`1">
             <summary>
