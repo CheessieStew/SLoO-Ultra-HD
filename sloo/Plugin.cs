@@ -1,9 +1,11 @@
-﻿namespace Jacobi.Vst.Samples.MidiNoteSampler
+﻿namespace sloo
 {
     using Jacobi.Vst.Core;
     using Jacobi.Vst.Core.Plugin;
     using Jacobi.Vst.Framework;
     using Jacobi.Vst.Framework.Plugin;
+    using Jacobi.Vst.Samples.MidiNoteSampler;
+    using sloo;
     using sloo;
     using System.Reflection;
 
@@ -12,6 +14,8 @@
     /// </summary>
     public class Plugin : VstPluginWithInterfaceManagerBase
     {
+        public PluginParameterFactory ParameterFactory { get; private set; }
+
         public float Volume { get; set; }
         /// <summary>
         /// Constructs a new instance.
@@ -25,6 +29,8 @@
                 36373435)
         {
             SampleManager = new SampleManager();
+            ParameterFactory = new PluginParameterFactory();
+
         }
 
         /// <summary>

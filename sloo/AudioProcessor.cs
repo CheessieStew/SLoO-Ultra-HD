@@ -3,6 +3,7 @@
     using Jacobi.Vst.Core;
     using Jacobi.Vst.Framework;
     using Jacobi.Vst.Framework.Plugin;
+    using sloo;
     using System;
 
     /// <summary>

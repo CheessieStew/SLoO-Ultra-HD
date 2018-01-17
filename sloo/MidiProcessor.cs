@@ -2,6 +2,7 @@
 {
     using Jacobi.Vst.Core;
     using Jacobi.Vst.Framework;
+    using sloo;
 
     /// <summary>
     /// Manages incoming midi events and sents them to the <see cref="SampleManager"/>.
