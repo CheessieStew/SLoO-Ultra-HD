@@ -18,7 +18,7 @@
         /// </summary>
         public Plugin()
             : base("SLoO", 
-                new VstProductInfo("_SLoO_", "Cheessie Stew", 1000),
+                new VstProductInfo(@"__/SLoO\__/ULtRa\__/HD\__", "Cheessie Stew", 1000),
                 VstPluginCategory.Synth, 
                 VstPluginCapabilities.NoSoundInStop, 
                 0, 

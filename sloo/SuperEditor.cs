@@ -17,7 +17,7 @@ namespace sloo
         {
             _plugin = p;
         }
-        public VstKnobMode KnobMode { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public VstKnobMode KnobMode { get => VstKnobMode.CircularMode; set { } }
 
         public Rectangle Bounds
         { get
@@ -34,12 +34,12 @@ namespace sloo
 
         public bool KeyDown(byte ascii, VstVirtualKey virtualKey, VstModifierKeys modifers)
         {
-            throw new NotImplementedException();
+            return true;
         }
 
         public bool KeyUp(byte ascii, VstVirtualKey virtualKey, VstModifierKeys modifers)
         {
-            throw new NotImplementedException();
+            return true;
         }
 
         public void Open(IntPtr hWnd)
