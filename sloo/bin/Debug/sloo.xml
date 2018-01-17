@@ -1,0 +1,185 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>sloo</name>
+    </assembly>
+    <members>
+        <member name="T:Jacobi.Vst.Samples.MidiNoteSampler.AudioProcessor">
+            <summary>
+            Implements the audio processing of the plugin using the <see cref="T:Jacobi.Vst.Samples.MidiNoteSampler.SampleManager"/>.
+            </summary>
+        </member>
+        <member name="M:Jacobi.Vst.Samples.MidiNoteSampler.AudioProcessor.#ctor(Jacobi.Vst.Samples.MidiNoteSampler.Plugin)">
+            <summary>
+            Constructs a new instance.
+            </summary>
+            <param name="plugin">Must not be null.</param>
+        </member>
+        <member name="T:Jacobi.Vst.Samples.MidiNoteSampler.MidiProcessor">
+            <summary>
+            Manages incoming midi events and sents them to the <see cref="T:Jacobi.Vst.Samples.MidiNoteSampler.SampleManager"/>.
+            </summary>
+        </member>
+        <member name="M:Jacobi.Vst.Samples.MidiNoteSampler.MidiProcessor.#ctor(Jacobi.Vst.Samples.MidiNoteSampler.Plugin)">
+            <summary>
+            Constructs a new instance.
+            </summary>
+            <param name="plugin"></param>
+        </member>
+        <member name="P:Jacobi.Vst.Samples.MidiNoteSampler.MidiProcessor.ChannelCount">
+            <summary>
+            Always returns 16.
+            </summary>
+        </member>
+        <member name="M:Jacobi.Vst.Samples.MidiNoteSampler.MidiProcessor.Process(Jacobi.Vst.Framework.VstEventCollection)">
+            <summary>
+            Handles and filters the incoming midi events.
+            </summary>
+            <param name="events">The midi events for the current cycle.</param>
+        </member>
+        <member name="T:Jacobi.Vst.Samples.MidiNoteSampler.Plugin">
+            <summary>
+            The Plugin root class that derives from the framework provided base class that also include the interface manager.
+            </summary>
+        </member>
+        <member name="M:Jacobi.Vst.Samples.MidiNoteSampler.Plugin.#ctor">
+            <summary>
+            Constructs a new instance.
+            </summary>
+        </member>
+        <member name="P:Jacobi.Vst.Samples.MidiNoteSampler.Plugin.SampleManager">
+            <summary>
+            Gets the sample manager.
+            </summary>
+        </member>
+        <member name="M:Jacobi.Vst.Samples.MidiNoteSampler.Plugin.CreateAudioProcessor(Jacobi.Vst.Framework.IVstPluginAudioProcessor)">
+            <summary>
+            Creates a default instance and reuses that for all threads.
+            </summary>
+            <param name="instance">A reference to the default instance or null.</param>
+            <returns>Returns the default instance.</returns>
+        </member>
+        <member name="M:Jacobi.Vst.Samples.MidiNoteSampler.Plugin.CreateMidiProcessor(Jacobi.Vst.Framework.IVstMidiProcessor)">
+            <summary>
+            Creates a default instance and reuses that for all threads.
+            </summary>
+            <param name="instance">A reference to the default instance or null.</param>
+            <returns>Returns the default instance.</returns>
+        </member>
+        <member name="T:Jacobi.Vst.Samples.MidiNoteSampler.PluginCommandStub">
+            <summary>
+            The public Plugin Command Stub implementation derived from the framework provided <see cref="T:Jacobi.Vst.Framework.Plugin.StdPluginCommandStub"/>.
+            </summary>
+        </member>
+        <member name="M:Jacobi.Vst.Samples.MidiNoteSampler.PluginCommandStub.CreatePluginInstance">
+            <summary>
+            Called by the framework to create the plugin root class.
+            </summary>
+            <returns>Never returns null.</returns>
+        </member>
+        <member name="T:Jacobi.Vst.Samples.MidiNoteSampler.SampleManager">
+            <summary>
+            Manages playback, recording and storing audio samples.
+            </summary>
+        </member>
+        <member name="M:Jacobi.Vst.Samples.MidiNoteSampler.SampleManager.ProcessNoteOnEvent(System.Byte)">
+            <summary>
+            Starts recording the current audio or playing back the sample buffer.
+            </summary>
+            <param name="noteNo">The midi note number.</param>
+        </member>
+        <member name="M:Jacobi.Vst.Samples.MidiNoteSampler.SampleManager.ProcessNoteOffEvent(System.Byte)">
+            <summary>
+            Stops recording the current audio or playing back the the sample buffer.
+            </summary>
+            <param name="noteNo">The midi note number.</param>
+        </member>
+        <member name="P:Jacobi.Vst.Samples.MidiNoteSampler.SampleManager.IsRecording">
+            <summary>
+            Indicates if the current audio stream is being recorded.
+            </summary>
+        </member>
+        <member name="M:Jacobi.Vst.Samples.MidiNoteSampler.SampleManager.RecordAudio(Jacobi.Vst.Core.VstAudioBuffer[])">
+            <summary>
+            Copies out the audio samples from the <paramref name="channels"/>.
+            </summary>
+            <param name="channels">Input buffers. Must not be null.</param>
+        </member>
+        <member name="P:Jacobi.Vst.Samples.MidiNoteSampler.SampleManager.IsPlaying">
+            <summary>
+            Indicates if a recorded sample buffer is being played back.
+            </summary>
+        </member>
+        <member name="M:Jacobi.Vst.Samples.MidiNoteSampler.SampleManager.PlayAudio(Jacobi.Vst.Core.VstAudioBuffer[])">
+            <summary>
+            Plays back the current sample buffer
+            </summary>
+            <param name="channels">Output buffers. Must not be null.</param>
+        </member>
+        <member name="T:Jacobi.Vst.Samples.MidiNoteSampler.SampleManager.SampleRecorder">
+            <summary>
+            Manages recording audio samples.
+            </summary>
+        </member>
+        <member name="T:Jacobi.Vst.Samples.MidiNoteSampler.SampleManager.SamplePlayer">
+            <summary>
+            Manages playing back a sample buffer
+            </summary>
+        </member>
+        <member name="T:Jacobi.Vst.Samples.MidiNoteSampler.SampleManager.StereoBuffer">
+            <summary>
+            Manages a stereo sample buffer for a specific note number.
+            </summary>
+        </member>
+        <member name="T:sloo.EditorControl">
+            <summary>
+            Interaction logic for EditorControl.xaml
+            </summary>
+            <summary>
+            EditorControl
+            </summary>
+        </member>
+        <member name="M:sloo.EditorControl.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:sloo.WpfControlWrapper`1">
+            <summary>
+            Helper class to attach a WPF UserControl to a Win32 native main window of the host.
+            </summary>
+            <typeparam name="T">The type of the managed WPF Control.</typeparam>
+        </member>
+        <member name="M:sloo.WpfControlWrapper`1.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Constructs a new instance for the specified <paramref name="width"/> and <paramref name="height"/>.
+            </summary>
+            <param name="width">The width of the control.</param>
+            <param name="height">The height of the control.</param>
+        </member>
+        <member name="P:sloo.WpfControlWrapper`1.Instance">
+            <summary>
+            Gets and instance of the specified <typeparamref name="T"/>.
+            </summary>
+            <remarks>Can return null.</remarks>
+        </member>
+        <member name="M:sloo.WpfControlWrapper`1.Open(System.IntPtr)">
+            <summary>
+            Opens and attaches the Control to the <paramref name="hWnd"/>.
+            </summary>
+            <param name="hWnd">The native win32 handle to the main window of the host.</param>
+        </member>
+        <member name="M:sloo.WpfControlWrapper`1.GetBounds(System.Drawing.Rectangle@)">
+            <summary>
+            Returns the bounding rectangle of the Control.
+            </summary>
+            <param name="rect">Receives the bounding rectangle.</param>
+            <remarks>The same size as in design-time.</remarks>
+        </member>
+        <member name="M:sloo.WpfControlWrapper`1.Close">
+            <summary>
+            Closes and destroys the Control.
+            </summary>
+        </member>
+    </members>
+</doc>

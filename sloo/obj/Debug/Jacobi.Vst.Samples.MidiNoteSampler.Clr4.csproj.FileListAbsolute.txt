@@ -1,0 +1,9 @@
+D:\Git\vst.net\Source\Samples\Jacobi.Vst.Samples.MidiNoteSampler\obj\Debug\Jacobi.Vst.Samples.MidiNoteSampler.Clr4.csprojResolveAssemblyReference.cache
+D:\Git\vst.net\Source\Samples\Jacobi.Vst.Samples.MidiNoteSampler\obj\Debug\Jacobi.Vst.Samples.MidiNoteSampler.Clr4.csproj.CoreCompileInputs.cache
+D:\Git\vst.net\Source\Samples\Jacobi.Vst.Samples.MidiNoteSampler\bin\Debug\Jacobi.Vst.Samples.MidiNoteSampler.XML
+D:\Git\vst.net\Source\Samples\Jacobi.Vst.Samples.MidiNoteSampler\bin\Debug\Jacobi.Vst.Samples.MidiNoteSampler.dll
+D:\Git\vst.net\Source\Samples\Jacobi.Vst.Samples.MidiNoteSampler\bin\Debug\Jacobi.Vst.Samples.MidiNoteSampler.pdb
+D:\Git\vst.net\Source\Samples\Jacobi.Vst.Samples.MidiNoteSampler\bin\Debug\Jacobi.Vst.Core.dll
+D:\Git\vst.net\Source\Samples\Jacobi.Vst.Samples.MidiNoteSampler\bin\Debug\Jacobi.Vst.Framework.dll
+D:\Git\vst.net\Source\Samples\Jacobi.Vst.Samples.MidiNoteSampler\obj\Debug\Jacobi.Vst.Samples.MidiNoteSampler.dll
+D:\Git\vst.net\Source\Samples\Jacobi.Vst.Samples.MidiNoteSampler\obj\Debug\Jacobi.Vst.Samples.MidiNoteSampler.pdb

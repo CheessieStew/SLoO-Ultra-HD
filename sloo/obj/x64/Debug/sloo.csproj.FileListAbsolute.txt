@@ -1,0 +1,13 @@
+D:\Git\vst.net\Source\Samples\sloo\bin\x64\Debug\sloo.dll
+D:\Git\vst.net\Source\Samples\sloo\bin\x64\Debug\sloo.pdb
+D:\Git\vst.net\Source\Samples\sloo\bin\x64\Debug\Jacobi.Vst.Samples.MidiNoteSampler.XML
+D:\Git\vst.net\Source\Samples\sloo\bin\x64\Debug\Jacobi.Vst.Core.dll
+D:\Git\vst.net\Source\Samples\sloo\bin\x64\Debug\Jacobi.Vst.Framework.dll
+D:\Git\vst.net\Source\Samples\sloo\obj\x64\Debug\sloo.csproj.CoreCompileInputs.cache
+D:\Git\vst.net\Source\Samples\sloo\obj\x64\Debug\sloo.dll
+D:\Git\vst.net\Source\Samples\sloo\obj\x64\Debug\sloo.pdb
+D:\Git\vst.net\Source\Samples\sloo\obj\x64\Debug\EditorControl.g.cs
+D:\Git\vst.net\Source\Samples\sloo\obj\x64\Debug\sloo_MarkupCompile.cache
+D:\Git\vst.net\Source\Samples\sloo\obj\x64\Debug\sloo_MarkupCompile.lref
+D:\Git\vst.net\Source\Samples\sloo\obj\x64\Debug\EditorControl.baml
+D:\Git\vst.net\Source\Samples\sloo\obj\x64\Debug\sloo.g.resources
