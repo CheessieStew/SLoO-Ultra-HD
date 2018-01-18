@@ -34,7 +34,7 @@ namespace sloo
             get => _plugin;
             set
             {
-                DataContext = value;
+                DataContext = value.Model;
                 _plugin = value;
             }
         }
@@ -43,5 +43,7 @@ namespace sloo
         {
             InitializeComponent();
         }
+
+
     }
 }

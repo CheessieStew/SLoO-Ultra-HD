@@ -47,6 +47,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Debug\sloo.xml</DocumentationFile>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -124,9 +125,11 @@
       <DependentUpon>EditorControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="MidiProcessor.cs" />
+    <Compile Include="Oscillator.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="PluginCommandStub.cs" />
     <Compile Include="PluginParameterFactory.cs" />
+    <Compile Include="PluginParametersModel.cs" />
     <Compile Include="PluginPrograms.cs" />
     <Compile Include="SampleManager.cs" />
     <Compile Include="SuperEditor.cs" />

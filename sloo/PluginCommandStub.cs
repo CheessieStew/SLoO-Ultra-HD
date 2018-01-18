@@ -14,7 +14,13 @@
         /// <returns>Never returns null.</returns>
         protected override Jacobi.Vst.Framework.IVstPlugin CreatePluginInstance()
         {
-            return new Plugin();
+            return new Plugin() { };
+        }
+
+        public override void SetSampleRate(float sampleRate)
+        {
+            base.SetSampleRate(sampleRate);
+
         }
     }
 }

@@ -28,24 +28,29 @@
 
 
         }
+        private Oscillator _osc = new Oscillator();
 
         public override void Process(VstAudioBuffer[] inChannels, VstAudioBuffer[] outChannels)
         {
-                VstAudioBuffer input = inChannels[0];
-                VstAudioBuffer output = outChannels[0];
 
-                for (int index = 0; index < output.SampleCount; index++)
-                {
-                    output[index] = input[index];
-                }
+            _osc.Frequency = _plugin.Model.Frequency;
+            _osc.CurrentSampleRate = this.SampleRate;
+            VstAudioBuffer input = inChannels[0];
+            VstAudioBuffer output = outChannels[0];
+            
+            
+            for (int index = 0; index < output.SampleCount; index++)
+            {
+                output[index] = (float)(_osc++.State() + input[index]) * _plugin.Model.Volume / 2;
+            }
 
-                input = inChannels[1];
-                output = outChannels[1];
+            input = inChannels[1];
+            output = outChannels[1];
 
-                for (int index = 0; index < output.SampleCount; index++)
-                {
-                    output[index] = _plugin.Volume *  (float)(input[index] * (0.8 + 0.4 * _rng.NextDouble()));
-                }
+            for (int index = 0; index < output.SampleCount; index++)
+            {
+                output[index] = _plugin.Model.Volume *  (float)(input[index] * (0.8 + 0.4 * _rng.NextDouble()));
+            }
         }
     }
 }

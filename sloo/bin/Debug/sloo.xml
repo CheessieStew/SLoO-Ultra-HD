@@ -125,12 +125,7 @@
             Constructs a new instance.
             </summary>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:sloo.Plugin._volumeMngr_PropertyChanged(System.Object,System.ComponentModel.PropertyChangedEventArgs)" -->
-        <member name="P:sloo.Plugin.SampleManager">
-            <summary>
-            Gets the sample manager.
-            </summary>
-        </member>
+        <!-- Badly formed XML comment ignored for member "P:sloo.Plugin.SampleManager" -->
         <member name="M:sloo.Plugin.CreateAudioProcessor(Jacobi.Vst.Framework.IVstPluginAudioProcessor)">
             <summary>
             Creates a default instance and reuses that for all threads.

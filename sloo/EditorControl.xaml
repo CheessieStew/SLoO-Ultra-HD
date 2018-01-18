@@ -8,6 +8,9 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <ListBox x:Name="listBox" HorizontalAlignment="Left" Height="100" Margin="137,146,0,0" VerticalAlignment="Top" Width="100"/>
-        <Slider Value="{Binding Volume}" />
+        <StackPanel>
+        <Slider Value="{Binding Volume }" />
+        <Slider Value="{Binding Frequency}" />
+        </StackPanel>
     </Grid>
 </UserControl>
