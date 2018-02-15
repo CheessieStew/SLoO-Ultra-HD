@@ -23,9 +23,9 @@ namespace SynthFW
         public Signal<double> Attack;
         public Signal<double> Sustain;
         
-        public Signal<double> AttackLength;
-        public Signal<double> DecayLength;
-        public Signal<double> ReleaseLength;
+        public Signal<double> AttackDuration;
+        public Signal<double> DecayDuration;
+        public Signal<double> ReleaseDuration;
 
         public Signal<bool> Triggers;
         public Signal<double> Input;
@@ -63,9 +63,9 @@ namespace SynthFW
                 }
             }
 
-            var deltaAttack = 1/(AttackLength[0,0] * _sampleRate);
-            var deltaDecay = 1/(DecayLength[0,0] * _sampleRate);
-            var deltaRelease = 1/(ReleaseLength[0,0] * _sampleRate);
+            var deltaAttack = 1/(AttackDuration[0,0] * _sampleRate);
+            var deltaDecay = 1/(DecayDuration[0,0] * _sampleRate);
+            var deltaRelease = 1/(ReleaseDuration[0,0] * _sampleRate);
             var deltaSustain = 0;
 
             var attack = Attack[0, 0];

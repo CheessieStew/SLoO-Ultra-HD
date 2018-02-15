@@ -14,6 +14,33 @@ namespace SynthFW
 
         public abstract void NextBlock(byte blockNr);
         public abstract T this[int sampleNr, int channel] { get; }
+        public Signal<R> Flat<R>(Func<R,T,R> aggregator, R seed) => new FlattenedSignal<R>(this, aggregator, seed);
+
+        private class FlattenedSignal<R> : Signal<R>
+        {
+            private Signal<T> _signal;
+            private Func<R,T,R> _aggregator;
+            private R _seed;
+            public FlattenedSignal(Signal<T> signal, Func<R,T,R> aggregator, R seed)
+            {
+                _signal = signal;
+                _aggregator = aggregator;
+                _seed = seed;
+            }
+
+            public override R this[int sampleNr, int channel] => Enumerable.Range(0, _signal.Channels)
+                .Select(i =>_signal[sampleNr, i])
+                .Aggregate(_seed,_aggregator);
+
+            public override int Channels => 1;
+
+            public override int BlockSize => _signal.BlockSize;
+
+            public override void NextBlock(byte blockNr)
+            {
+                _signal.NextBlock(blockNr);
+            }
+        }
     }
 
     public interface ISignalSource<T>

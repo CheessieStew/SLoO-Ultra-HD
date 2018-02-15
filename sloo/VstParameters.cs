@@ -12,7 +12,7 @@ namespace sloo
 {
     public class VstParameters : SynthFW.SynthParameters
     {
-        
+
         public override void SetUpParameter(PropertyInfo property, SynthParameter param)
         {
             var catName = param.Category ?? "Default";
@@ -23,26 +23,37 @@ namespace sloo
             var paramInfo = new VstParameterInfo();
             paramInfo.Category = category;
             paramInfo.CanBeAutomated = true;
-            paramInfo.Name = property.Name;
+            paramInfo.Name = param.Name;
             paramInfo.Label = property.Name;
             paramInfo.ShortLabel = param.ShortLabel;
             paramInfo.MinInteger = param.Lo;
             paramInfo.MaxInteger = param.Hi;
-            paramInfo.DefaultValue = 2;
+            paramInfo.DefaultValue = param.DefaultValue;
             VstParameterNormalizationInfo.AttachTo(paramInfo);
             var manager = new VstParameterManager(paramInfo);
             _managers.Add(manager);
-            manager.PropertyChanged += (object sender, PropertyChangedEventArgs e) =>
-            {
-                if (e.PropertyName == "CurrentValue")
+            if (property.PropertyType == typeof(float) || property.PropertyType == typeof(double))
+                manager.PropertyChanged += (object sender, PropertyChangedEventArgs e) =>
                 {
-                    Logger.LogLine("change " + property.Name);
-                    VstParameterManager paramMgr = (VstParameterManager)sender;
-                    property.SetValue(this, paramMgr.CurrentValue);
-                    OnPropertyChanged(property.Name);
-                }
-            };
-
+                    if (e.PropertyName == "CurrentValue")
+                    {
+                        VstParameterManager paramMgr = (VstParameterManager)sender;
+                        property.SetValue(this, paramMgr.CurrentValue);
+                        OnPropertyChanged(property.Name);
+                    }
+                };
+            else if (property.PropertyType == typeof(int))
+                manager.PropertyChanged += (object sender, PropertyChangedEventArgs e) =>
+                {
+                    if (e.PropertyName == "CurrentValue")
+                    {
+                        VstParameterManager paramMgr = (VstParameterManager)sender;
+                        property.SetValue(this, (int)(paramMgr.CurrentValue + 0.5f));
+                        OnPropertyChanged(property.Name);
+                    }
+                };
+            else
+                throw new InvalidOperationException($"Parameter type {property.PropertyType} is not supported (yet?)");
             ParameterInfos.Add(paramInfo);
         }
 

@@ -11,17 +11,17 @@
         <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="auto" Width="auto">
             <DockPanel HorizontalAlignment="Stretch">
                 <Label Foreground="Wheat" DockPanel.Dock="Left" Content="Sine"/>
-                <Slider Value="{Binding Sine }" Minimum="0" Maximum="10" />
+                <Slider Value="{Binding Sine }" />
             </DockPanel>
 
             <DockPanel HorizontalAlignment="Stretch">
                 <Label Foreground="Wheat" DockPanel.Dock="Left" Content="Sawtooth"/>
-                <Slider Value="{Binding Sawtooth}" Minimum="0" Maximum="10" />
+                <Slider Value="{Binding Sawtooth}" />
             </DockPanel>
 
             <DockPanel HorizontalAlignment="Stretch">
                 <Label Foreground="Wheat" DockPanel.Dock="Left" Content="Square"/>
-                <Slider Value="{Binding Square}" Minimum="0" Maximum="10" />
+                <Slider Value="{Binding Square}" />
             </DockPanel>
             <TextBox Height="200" VerticalScrollBarVisibility="Auto" Name="LogBox" IsReadOnly="True"/>
             <Button Content="clear log" Click="Button_Click"/>

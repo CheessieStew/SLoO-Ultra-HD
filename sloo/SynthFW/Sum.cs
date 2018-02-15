@@ -6,13 +6,11 @@ using System.Threading.Tasks;
 
 namespace SynthFW
 {
-    public class Multiply : DynamicSignal<double>
+    public class Sum: DynamicSignal<double>
     {
-        public Signal<double> Input2;
-        public Signal<double> Input1;        
-        
+        public readonly List<Signal<double>> Inputs = new List<Signal<double>>();        
 
-        public Multiply(string name) : base(null, name)
+        public Sum(string name) : base(null, name)
         {
             
         }
@@ -23,35 +21,34 @@ namespace SynthFW
             {
                 if (Buffer == null)
                     throw new SlooException(Name, "null output buffer");
-
+                if (Inputs.Count == 0)
+                    return;
                 _blockNr = blockNr;
-                Input1.NextBlock(blockNr);
-                Input2.NextBlock(blockNr);
+                Inputs.ForEach(i => i.NextBlock(blockNr));
+                
                 var outChannels = Buffer.GetLength(1);
 
-                if (outChannels == Input1.Channels)
+                if (outChannels == Inputs[0].Channels)
                     for (int sample = 0; sample < Buffer.GetLength(0); sample++)
                     {
                         for (int channel = 0; channel < Buffer.GetLength(1); channel++)
-                            Buffer[sample, channel] = Input1[sample, channel] * Input2[sample, channel];
+                            Buffer[sample, channel] = Inputs.Sum(i => i[sample, channel]);
                     }
-                else if (outChannels > Input1.Channels && Input1.Channels == 1)
+                else if (outChannels > Inputs[0].Channels && Inputs[0].Channels == 1)
                     for (int sample = 0; sample < Buffer.GetLength(0); sample++)
                     {
                         for (int channel = 0; channel < Buffer.GetLength(1); channel++)
-                            Buffer[sample, channel] = Input1[sample, 0] * Input2[sample, 0];
+                            Buffer[sample, channel] = Inputs.Sum(i => i[sample, 0]);
                     }
-                else if (outChannels < Input1.Channels && outChannels == 1)
+                else if (outChannels < Inputs[0].Channels && outChannels == 1)
                     for (int sample = 0; sample < Buffer.GetLength(0); sample++)
                     {
-                        double buf1 = 0;
-                        double buf2 = 0;
-                        for (int channel = 0; channel < Input1.Channels; channel++)
+                        Buffer[sample, 0] = 0;
+                        for (int channel = 0; channel < Inputs[0].Channels; channel++)
                         {
-                            buf1 += Input1[sample, channel];
-                            buf2 += Input2[sample, channel];
+                            Buffer[sample, 0] += Inputs.Sum(i => i[sample, channel]);
                         }
-                        Buffer[sample, 0] = buf1 * buf2;
+                        
                     }                
                 else throw new SlooException(Name, "Buffer sizes don't match");
 

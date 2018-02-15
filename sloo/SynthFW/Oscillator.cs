@@ -12,9 +12,14 @@ namespace SynthFW
         {
             Sine,
             Square,
-            AntiAliasedSquare
+            AntiAliasedSquare,
+            Triangle
         }
         public Signal<double> Frequency;
+        public Signal<double> TriangleSkew = new ConstantSignal<double>(() => 0.5);
+        public ConstantSignal<double> Amplitude = new ConstantSignal<double>(() => 1);
+        public ConstantSignal<double> Base = new ConstantSignal<double>(() => 0);
+
         private MultiOscillatorSignalSource _out;
         public DynamicSignal<double> Out { get; private set; }
 
@@ -46,6 +51,8 @@ namespace SynthFW
             }
         }
 
+
+
         public Oscillator(int channels, float sampleRate)
         {
             _guts = new SimpleOscillator[channels];
@@ -64,12 +71,16 @@ namespace SynthFW
         private void GetBlock(double[,] buffer, byte blockNr)
         {
             Frequency.NextBlock(blockNr);
+            TriangleSkew.NextBlock(blockNr);
+            Base.NextBlock(blockNr);
+            Amplitude.NextBlock(blockNr);
             for (int sample = 0; sample < buffer.GetLength(0); sample++)
             {
                 for (int channel = 0; channel < Channels; channel++)
                 {
                     _guts[channel].Frequency = Frequency[sample, channel];
-                    buffer[sample, channel] = _guts[channel].State;
+                    _guts[channel].TriangleSkew = TriangleSkew[sample, channel];
+                    buffer[sample, channel] = _guts[channel].State * Amplitude[sample,channel] + Base[sample,channel];
                     Tick();
                 }
             }
@@ -94,6 +105,7 @@ namespace SynthFW
 
         private class SimpleOscillator
         {
+            public double TriangleSkew;
             public WaveShape Shape;
             private double _angleDelta;
             private float _currentSampleRate;
@@ -148,14 +160,23 @@ namespace SynthFW
                             return (Math.Sin(Angle) + Math.Sin(Angle * 3) + Math.Sin(Angle * 5) + Math.Sin(Angle * 7) + Math.Sin(Angle * 9)) / 5;
                         case WaveShape.Square:
                             return (int)(Angle / Math.PI) % 2 == 0 ? 1 : -1;
+                        case WaveShape.Triangle:
+                            var period = (int)(Angle / TwoPi);
+                            var res = (Angle / TwoPi - period * TwoPi) - TriangleSkew;
+                            res /= res < 0 ? TriangleSkew : (1 - TriangleSkew);
+                            return 2*Math.Abs(res) - 1;
                     }
                     throw new NotImplementedException();
                 }
             }
 
+            private const double TwoPi = Math.PI * 2;
+
             public void Tick()
             {
                 Angle += _angleDelta;
+                if (Angle > float.MaxValue / 2)
+                    Angle = 0;
             }
         }
     }

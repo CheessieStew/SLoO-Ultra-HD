@@ -29,7 +29,6 @@
                 0, 
                 36373435)
         {
-            SampleManager = new SampleManager();
             Model = new PluginParametersModel();            
         }
 
@@ -39,14 +38,6 @@
 
             return instance;    // reuse initial instance
         }
-
-        /// <summary>
-        
-
-        /// <summary>
-        /// Gets the sample manager.
-        /// </summary>
-        public SampleManager SampleManager { get; private set; }
 
         /// <summary>
         /// Creates a default instance and reuses that for all threads.

@@ -132,6 +132,8 @@
     <Compile Include="AudioProcessor.cs" />
     <Compile Include="SynthFW\Logger.cs" />
     <Compile Include="SynthFW\MidiManager.cs" />
+    <Compile Include="SynthFW\Mix.cs" />
+    <Compile Include="SynthFW\Sum.cs" />
     <Compile Include="SynthFW\SynthFWException.cs" />
     <Compile Include="SynthFW\Adsr.cs" />
     <Compile Include="SynthFW\Multiply.cs" />
@@ -146,7 +148,6 @@
     <Compile Include="PluginCommandStub.cs" />
     <Compile Include="PluginParametersModel.cs" />
     <Compile Include="PluginPrograms.cs" />
-    <Compile Include="SampleManager.cs" />
     <Compile Include="SuperEditor.cs" />
     <Compile Include="SynthFW\Signal.cs" />
     <Compile Include="SynthFW\SynthParameters.cs" />

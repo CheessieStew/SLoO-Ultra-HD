@@ -14,4 +14,3 @@ D:\Git\SLoO-Ultra-HD\sloo\obj\Release\sloo.g.resources
 D:\Git\SLoO-Ultra-HD\sloo\obj\Release\sloo.csproj.CoreCompileInputs.cache
 D:\Git\SLoO-Ultra-HD\sloo\obj\Release\sloo.dll
 D:\Git\SLoO-Ultra-HD\sloo\obj\Release\sloo.pdb
-D:\Git\SLoO-Ultra-HD\sloo\obj\Release\sloo.csprojResolveAssemblyReference.cache

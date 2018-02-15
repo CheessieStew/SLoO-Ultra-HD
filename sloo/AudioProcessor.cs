@@ -18,7 +18,12 @@
         private int _blockSize;
         private float _sampleRate;
         private double[,] _scratchBuffer1;
-        private double[,] _scratchBufferChannels;
+        private double[,] _scratchBuffer2;
+        private double[,] _scratchBuffer3;
+
+        private double[,] _scratchBufferChannels1;
+        private double[,] _scratchBufferChannels2;
+        private double[,] _scratchBufferChannels3;
 
         private Signal<double> _out;
 
@@ -48,47 +53,103 @@
             _plugin.MidiProcessor.NoteOn += _midiManager.NoteOn;
 
             _scratchBuffer1 = new double[this.BlockSize, 1];
-            _scratchBufferChannels = new double[this.BlockSize, NoteChannels];
+            _scratchBuffer2 = new double[this.BlockSize, 1];
+            _scratchBuffer3 = new double[this.BlockSize, 1];
+
+            _scratchBufferChannels1 = new double[this.BlockSize, NoteChannels];
+            _scratchBufferChannels2 = new double[this.BlockSize, NoteChannels];
+            _scratchBufferChannels3 = new double[this.BlockSize, NoteChannels];
 
             _blockSize = BlockSize;
             _sampleRate = SampleRate;
 
-            var square1 = new Oscillator(NoteChannels, this.SampleRate) { Shape = Oscillator.WaveShape.AntiAliasedSquare };
 
 
-            var sine1 = new Oscillator(NoteChannels, this.SampleRate) { Shape = Oscillator.WaveShape.Sine };
-            sine1.Frequency = _midiManager.ChannelFrequencies; 
-            sine1.Out.Buffer = _scratchBufferChannels;
+            var sine1 = new Oscillator(NoteChannels, this.SampleRate)
+            {
+                Shape = Oscillator.WaveShape.Sine,
+                Frequency = _midiManager.ChannelFrequencies,
+                Amplitude = new ConstantSignal<double>(() => _plugin.Model.Sine)
+            };
+            sine1.Out.Buffer = _scratchBufferChannels1;
 
-            var sine1out = new Multiply("sineGain");
-            sine1out.Input = sine1.Out;
-            sine1out.Multiplier = new ConstantSignal<double>(() => _plugin.Model.Sine);
-            sine1out.Buffer = _scratchBufferChannels;
+            var square1 = new Oscillator(NoteChannels, this.SampleRate)
+            {
+                Shape = Oscillator.WaveShape.Square,
+                Frequency = _midiManager.ChannelFrequencies,
+                Amplitude = new ConstantSignal<double>(() => _plugin.Model.Square)
+            };
+            square1.Out.Buffer = _scratchBufferChannels2;
+            
+            var triangle1 = new Oscillator(NoteChannels, this.SampleRate)
+            {
+                Shape = Oscillator.WaveShape.Square,
+                Frequency = _midiManager.ChannelFrequencies,
+                TriangleSkew = new ConstantSignal<double>(() => _plugin.Model.TriangleSkew),
+                Amplitude = new ConstantSignal<double>(() => _plugin.Model.Triangle)
+            };
+            triangle1.Out.Buffer = _scratchBufferChannels3;
 
-            var adsr = new Adsr(NoteChannels, this.SampleRate);
+            var sourceSum = new Sum("sourceSum");
+            sourceSum.Inputs.Add(sine1.Out);
+            sourceSum.Inputs.Add(square1.Out);
+            sourceSum.Inputs.Add(triangle1.Out);
+            sourceSum.Buffer = _scratchBufferChannels1;
 
-            adsr.ReleaseLength = new ConstantSignal<double>(() => 0.2);
-            adsr.AttackLength = new ConstantSignal<double>(() => 0.1);
-            adsr.DecayLength = new ConstantSignal<double>(() => 0.3);
-            adsr.Attack = new ConstantSignal<double>(() => 0.7);
-            adsr.Sustain = new ConstantSignal<double>(() => 0.4);
-            adsr.Triggers = _midiManager.ChannelTriggers;
+            var adsr = new Adsr(NoteChannels, this.SampleRate)
+            {
+                ReleaseDuration = new ConstantSignal<double>(() => _plugin.Model.ReleaseDuration/5),
+                AttackDuration = new ConstantSignal<double>(() => _plugin.Model.AttackDuration/10),
+                DecayDuration = new ConstantSignal<double>(() => _plugin.Model.DecayDuration/10),
+                Attack = new ConstantSignal<double>(() => _plugin.Model.AttackStrength),
+                Sustain = new ConstantSignal<double>(() => _plugin.Model.SustainStrength),
+                Triggers = _midiManager.ChannelTriggers,
+                Input = sourceSum
+            };
+            adsr.Out.Buffer = _scratchBufferChannels1;
 
-            adsr.Input = sine1out;
-            adsr.Out.Buffer = _scratchBufferChannels;
 
-            var delay = new Delay() { DelayLength = 2000 };
+            var delayOsc = new Oscillator(1, SampleRate)
+            {
+                Shape = Oscillator.WaveShape.Triangle,
+                Frequency = new ConstantSignal<double>(() => _plugin.Model.Delay1PlaybackSpeedFreq),
+                Amplitude = new ConstantSignal<double>(() => _plugin.Model.Delay1PlaybackSpeedMod / 2),
+                Base = new ConstantSignal<double>(() => 1)
+            };
+            delayOsc.Out.Buffer = _scratchBuffer2;
 
-            delay.Input = adsr.Out;
-            delay.PlaybackSpeed = new ConstantSignal<double>(() => _plugin.Model.Blur);
+
+
+            var delay = new Delay()
+            {
+                DelayLength = new ConstantSignal<int>(() => _plugin.Model.Delay1Length),
+                PlaybackSpeed = delayOsc.Out,
+                Gain = new ConstantSignal<double>(() => _plugin.Model.Delay1Gain)
+            };
             delay.Out.Buffer = _scratchBuffer1;
 
-            var _softClip = new ApplyFunction(sample => sample / (1 + Math.Abs(sample)), "SoftClip");
-            _softClip.Buffer = _scratchBuffer1;
-            _softClip.Input = adsr.Out;
+            var combine = new Mix("Combine");
+            combine.Inputs.Add(delay.Out);
+            combine.Inputs.Add(adsr.Out.Flat((sum,cur) => sum+cur, 0d));
+            combine.Strengths.Add(new ConstantSignal<double>(() => _plugin.Model.Wet1));
+            combine.Strengths.Add(new ConstantSignal<double>(() => 1-_plugin.Model.Wet1));
+            combine.Buffer = _scratchBuffer3;
 
-            _out = _softClip;
+            var lowPass1 = new LowPass(1)
+            {
+                Scale = new ConstantSignal<double>(() => _plugin.Model.Filter1);
+            }
 
+
+            delay.Input = combine;
+            
+            var softClip = new ApplyFunction(sample => sample / (1 + Math.Abs(sample)), "SoftClip")
+            {
+                Buffer = _scratchBuffer1,
+                Input = delay.Out,
+            };
+
+            _out = softClip;
         }
 
 
@@ -133,9 +194,7 @@
                 _timeOut = 50;
             }
         }
-
-
-      
+              
 
         private void LogLine(string s) => Logger.LogLine(s);
 

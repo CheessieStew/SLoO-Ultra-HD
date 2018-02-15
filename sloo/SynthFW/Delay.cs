@@ -9,21 +9,9 @@ namespace SynthFW
     public class Delay
     {
         public string Name = "Delay";
-        private int _delayLength;
-        public int DelayLength
-        {
-            get => _delayLength;
-            set
-            {
-                _delayLength = value;
-                _delayLengthChanged = true;
-                _tapInPosition = 0;
-                _tapOutPosition = 0;
-                _tapOutPosition = 0;
-            }
-        }
-        private bool _delayLengthChanged;
+        public Signal<int> DelayLength = new ConstantSignal<int>(() => 3000);
 
+        private int BufferLen => _delayBuffer.Length;
         private double[] _delayBuffer;
         private int _tapInPosition;
         private double _tapOutPosition;
@@ -31,8 +19,9 @@ namespace SynthFW
 
         public DynamicSignal<double> Out { get; private set; }
 
-        public Signal<double> PlaybackSpeed;
+        public Signal<double> PlaybackSpeed = new ConstantSignal<double>(() =>1);
         public Signal<double> Input;
+        public ConstantSignal<double> Gain = new ConstantSignal<double>(() => 1);
 
         public Delay()
         {
@@ -40,34 +29,60 @@ namespace SynthFW
             Out = new DynamicSignal<double>(_out, Name + "_out");
         }
 
+        private int _inBlock;
+        private int _outBlock;
+
         private void GetBlock(double[,] output, byte blockNr)
         {
             if (Input == null || PlaybackSpeed == null)
                 return;
-
-            PlaybackSpeed.NextBlock(blockNr);
-            Input.NextBlock(blockNr);
-
-            if (_delayLengthChanged)
+            DelayLength.NextBlock(blockNr);
+            if (DelayLength[0,0] != _delayBuffer.Length)
             {
-                _delayBuffer = new double[_delayLength];
-                _delayLengthChanged = false;
+                var value = DelayLength[0, 0];
+                _tapInPosition = 0;
+                _tapOutPosition = 0;
+                _tapOutPosition = 0;
+                _delayBuffer = new double[Math.Max(1100, value)];
             }
-            
+
+            SetOutBlock(output, blockNr);
+            ProcessInBlock(blockNr);
+        }
+
+        private void SetOutBlock(double[,] output, byte blockNr)
+        {
+            if (blockNr == _outBlock)
+                return;
+            PlaybackSpeed.NextBlock(blockNr);
+            _outBlock = blockNr;
             for (int sample = 0; sample < output.GetLength(0); sample++)
             {
-                _delayBuffer[_tapInPosition] = Enumerable.Range(0, Input.Channels).Sum(c => Input[sample,c]);
                 var blend = _tapOutPosition - (int)_tapOutPosition;
-                output[sample,0] = _delayBuffer[(int)_tapOutPosition] * (1-blend) 
-                    + _delayBuffer[(int)(_tapOutPosition+0.5) % DelayLength] * blend;
+                output[sample, 0] = _delayBuffer[((int)_tapOutPosition) % BufferLen] * (1 - blend)
+                    + _delayBuffer[((int)(_tapOutPosition + 0.5)) % BufferLen] * blend;
 
-                _tapInPosition = (_tapInPosition + 1) % DelayLength;
                 _tapOutPosition += PlaybackSpeed[sample, 0];
-                if (_tapOutPosition >= DelayLength)
-                    _tapOutPosition -= DelayLength;
+                if (_tapOutPosition >= BufferLen)
+                    _tapOutPosition -= BufferLen;
             }
         }
 
+        private void ProcessInBlock(byte blockNr)
+        {
+            if (blockNr == _inBlock)
+                return;
+            _inBlock = blockNr;
+            Input.NextBlock(blockNr);
+            Gain.NextBlock(blockNr);
+
+            for (int sample = 0; sample < Input.BlockSize; sample++)
+            {
+                _delayBuffer[_tapInPosition] = Enumerable.Range(0, Input.Channels).Sum(c => Input[sample, c]) * Gain[sample, 0];
+
+                _tapInPosition = (_tapInPosition + 1) % BufferLen;
+            }
+        }
 
 
         private class DelaySignalSource : ISignalSource<double>
