@@ -24,22 +24,10 @@ namespace sloo
         {
             VstProgramCollection programs = new VstProgramCollection();
 
-            VstProgram prog = new VstProgram(_plugin.ParameterFactory.Categories);
-            prog.Name = "Fx Program 1";
-            _plugin.ParameterFactory.CreateParameters(prog.Parameters);
-
-            programs.Add(prog);
-
-            prog = new VstProgram(_plugin.ParameterFactory.Categories);
-            prog.Name = "Fx Program 2";
-            _plugin.ParameterFactory.CreateParameters(prog.Parameters);
-
-            programs.Add(prog);
-
-            prog = new VstProgram(_plugin.ParameterFactory.Categories);
-            prog.Name = "Fx Program 3";
-            _plugin.ParameterFactory.CreateParameters(prog.Parameters);
-
+            VstProgram prog = new VstProgram(_plugin.Model.Categories);
+            prog.Name = "SLoOultraHD";
+            _plugin.Model.CreateParameters(prog.Parameters);
+            
             programs.Add(prog);
 
             return programs;

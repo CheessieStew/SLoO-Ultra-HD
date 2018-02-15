@@ -4,103 +4,16 @@
         <name>sloo</name>
     </assembly>
     <members>
-        <member name="T:Jacobi.Vst.Samples.MidiNoteSampler.AudioProcessor">
+        <member name="T:sloo.AudioProcessor">
             <summary>
-            Implements the audio processing of the plugin using the <see cref="T:Jacobi.Vst.Samples.MidiNoteSampler.SampleManager"/>.
+            Implements the audio processing of the plugin using the <see cref="!:SampleManager"/>.
             </summary>
         </member>
-        <member name="M:Jacobi.Vst.Samples.MidiNoteSampler.AudioProcessor.#ctor(sloo.Plugin)">
+        <member name="M:sloo.AudioProcessor.#ctor(sloo.Plugin)">
             <summary>
             Constructs a new instance.
             </summary>
             <param name="plugin">Must not be null.</param>
-        </member>
-        <member name="T:Jacobi.Vst.Samples.MidiNoteSampler.MidiProcessor">
-            <summary>
-            Manages incoming midi events and sents them to the <see cref="T:Jacobi.Vst.Samples.MidiNoteSampler.SampleManager"/>.
-            </summary>
-        </member>
-        <member name="M:Jacobi.Vst.Samples.MidiNoteSampler.MidiProcessor.#ctor(sloo.Plugin)">
-            <summary>
-            Constructs a new instance.
-            </summary>
-            <param name="plugin"></param>
-        </member>
-        <member name="P:Jacobi.Vst.Samples.MidiNoteSampler.MidiProcessor.ChannelCount">
-            <summary>
-            Always returns 16.
-            </summary>
-        </member>
-        <member name="M:Jacobi.Vst.Samples.MidiNoteSampler.MidiProcessor.Process(Jacobi.Vst.Framework.VstEventCollection)">
-            <summary>
-            Handles and filters the incoming midi events.
-            </summary>
-            <param name="events">The midi events for the current cycle.</param>
-        </member>
-        <member name="T:Jacobi.Vst.Samples.MidiNoteSampler.PluginCommandStub">
-            <summary>
-            The public Plugin Command Stub implementation derived from the framework provided <see cref="T:Jacobi.Vst.Framework.Plugin.StdPluginCommandStub"/>.
-            </summary>
-        </member>
-        <member name="M:Jacobi.Vst.Samples.MidiNoteSampler.PluginCommandStub.CreatePluginInstance">
-            <summary>
-            Called by the framework to create the plugin root class.
-            </summary>
-            <returns>Never returns null.</returns>
-        </member>
-        <member name="T:Jacobi.Vst.Samples.MidiNoteSampler.SampleManager">
-            <summary>
-            Manages playback, recording and storing audio samples.
-            </summary>
-        </member>
-        <member name="M:Jacobi.Vst.Samples.MidiNoteSampler.SampleManager.ProcessNoteOnEvent(System.Byte)">
-            <summary>
-            Starts recording the current audio or playing back the sample buffer.
-            </summary>
-            <param name="noteNo">The midi note number.</param>
-        </member>
-        <member name="M:Jacobi.Vst.Samples.MidiNoteSampler.SampleManager.ProcessNoteOffEvent(System.Byte)">
-            <summary>
-            Stops recording the current audio or playing back the the sample buffer.
-            </summary>
-            <param name="noteNo">The midi note number.</param>
-        </member>
-        <member name="P:Jacobi.Vst.Samples.MidiNoteSampler.SampleManager.IsRecording">
-            <summary>
-            Indicates if the current audio stream is being recorded.
-            </summary>
-        </member>
-        <member name="M:Jacobi.Vst.Samples.MidiNoteSampler.SampleManager.RecordAudio(Jacobi.Vst.Core.VstAudioBuffer[])">
-            <summary>
-            Copies out the audio samples from the <paramref name="channels"/>.
-            </summary>
-            <param name="channels">Input buffers. Must not be null.</param>
-        </member>
-        <member name="P:Jacobi.Vst.Samples.MidiNoteSampler.SampleManager.IsPlaying">
-            <summary>
-            Indicates if a recorded sample buffer is being played back.
-            </summary>
-        </member>
-        <member name="M:Jacobi.Vst.Samples.MidiNoteSampler.SampleManager.PlayAudio(Jacobi.Vst.Core.VstAudioBuffer[])">
-            <summary>
-            Plays back the current sample buffer
-            </summary>
-            <param name="channels">Output buffers. Must not be null.</param>
-        </member>
-        <member name="T:Jacobi.Vst.Samples.MidiNoteSampler.SampleManager.SampleRecorder">
-            <summary>
-            Manages recording audio samples.
-            </summary>
-        </member>
-        <member name="T:Jacobi.Vst.Samples.MidiNoteSampler.SampleManager.SamplePlayer">
-            <summary>
-            Manages playing back a sample buffer
-            </summary>
-        </member>
-        <member name="T:Jacobi.Vst.Samples.MidiNoteSampler.SampleManager.StereoBuffer">
-            <summary>
-            Manages a stereo sample buffer for a specific note number.
-            </summary>
         </member>
         <member name="T:sloo.EditorControl">
             <summary>
@@ -215,6 +128,93 @@
         <member name="M:sloo.WpfControlWrapper`1.Close">
             <summary>
             Closes and destroys the Control.
+            </summary>
+        </member>
+        <member name="T:Jacobi.Vst.Samples.MidiNoteSampler.MidiProcessor">
+            <summary>
+            Manages incoming midi events and sents them to the <see cref="T:Jacobi.Vst.Samples.MidiNoteSampler.SampleManager"/>.
+            </summary>
+        </member>
+        <member name="M:Jacobi.Vst.Samples.MidiNoteSampler.MidiProcessor.#ctor(sloo.Plugin)">
+            <summary>
+            Constructs a new instance.
+            </summary>
+            <param name="plugin"></param>
+        </member>
+        <member name="P:Jacobi.Vst.Samples.MidiNoteSampler.MidiProcessor.ChannelCount">
+            <summary>
+            Always returns 16.
+            </summary>
+        </member>
+        <member name="M:Jacobi.Vst.Samples.MidiNoteSampler.MidiProcessor.Process(Jacobi.Vst.Framework.VstEventCollection)">
+            <summary>
+            Handles and filters the incoming midi events.
+            </summary>
+            <param name="events">The midi events for the current cycle.</param>
+        </member>
+        <member name="T:Jacobi.Vst.Samples.MidiNoteSampler.PluginCommandStub">
+            <summary>
+            The public Plugin Command Stub implementation derived from the framework provided <see cref="T:Jacobi.Vst.Framework.Plugin.StdPluginCommandStub"/>.
+            </summary>
+        </member>
+        <member name="M:Jacobi.Vst.Samples.MidiNoteSampler.PluginCommandStub.CreatePluginInstance">
+            <summary>
+            Called by the framework to create the plugin root class.
+            </summary>
+            <returns>Never returns null.</returns>
+        </member>
+        <member name="T:Jacobi.Vst.Samples.MidiNoteSampler.SampleManager">
+            <summary>
+            Manages playback, recording and storing audio samples.
+            </summary>
+        </member>
+        <member name="M:Jacobi.Vst.Samples.MidiNoteSampler.SampleManager.ProcessNoteOnEvent(System.Byte)">
+            <summary>
+            Starts recording the current audio or playing back the sample buffer.
+            </summary>
+            <param name="noteNo">The midi note number.</param>
+        </member>
+        <member name="M:Jacobi.Vst.Samples.MidiNoteSampler.SampleManager.ProcessNoteOffEvent(System.Byte)">
+            <summary>
+            Stops recording the current audio or playing back the the sample buffer.
+            </summary>
+            <param name="noteNo">The midi note number.</param>
+        </member>
+        <member name="P:Jacobi.Vst.Samples.MidiNoteSampler.SampleManager.IsRecording">
+            <summary>
+            Indicates if the current audio stream is being recorded.
+            </summary>
+        </member>
+        <member name="M:Jacobi.Vst.Samples.MidiNoteSampler.SampleManager.RecordAudio(Jacobi.Vst.Core.VstAudioBuffer[])">
+            <summary>
+            Copies out the audio samples from the <paramref name="channels"/>.
+            </summary>
+            <param name="channels">Input buffers. Must not be null.</param>
+        </member>
+        <member name="P:Jacobi.Vst.Samples.MidiNoteSampler.SampleManager.IsPlaying">
+            <summary>
+            Indicates if a recorded sample buffer is being played back.
+            </summary>
+        </member>
+        <member name="M:Jacobi.Vst.Samples.MidiNoteSampler.SampleManager.PlayAudio(Jacobi.Vst.Core.VstAudioBuffer[])">
+            <summary>
+            Plays back the current sample buffer
+            </summary>
+            <param name="channels">Output buffers. Must not be null.</param>
+        </member>
+        <member name="T:Jacobi.Vst.Samples.MidiNoteSampler.SampleManager.SampleRecorder">
+            <summary>
+            Manages recording audio samples.
+            </summary>
+        </member>
+        <member name="T:Jacobi.Vst.Samples.MidiNoteSampler.SampleManager.SamplePlayer">
+            <summary>
+            Manages playing back a sample buffer
+            </summary>
+        </member>
+        <member name="T:Jacobi.Vst.Samples.MidiNoteSampler.SampleManager.StereoBuffer">
+            <summary>
+            Manages a stereo sample buffer for a specific note number.
             </summary>
         </member>
     </members>

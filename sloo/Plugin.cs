@@ -6,7 +6,6 @@
     using Jacobi.Vst.Framework.Plugin;
     using Jacobi.Vst.Samples.MidiNoteSampler;
     using sloo;
-    using sloo;
     using System.ComponentModel;
     using System.Reflection;
 
@@ -16,8 +15,8 @@
     public class Plugin : VstPluginWithInterfaceManagerBase
     {
         public PluginParametersModel Model;
-        public PluginParameterFactory ParameterFactory { get; private set; }
-
+        public AudioProcessor AudioProcessor { get; private set; }
+        public MidiProcessor MidiProcessor { get; private set; }
 
         /// <summary>
         /// Constructs a new instance.
@@ -31,12 +30,7 @@
                 36373435)
         {
             SampleManager = new SampleManager();
-            ParameterFactory = new PluginParameterFactory();
-
-            Model = new PluginParametersModel(ParameterFactory);
-
-
-            
+            Model = new PluginParametersModel();            
         }
 
         protected override IVstPluginPrograms CreatePrograms(IVstPluginPrograms instance)
@@ -61,13 +55,11 @@
         /// <returns>Returns the default instance.</returns>
         protected override IVstPluginAudioProcessor CreateAudioProcessor(IVstPluginAudioProcessor instance)
         {
-            if (instance == null) return (p = new AudioProcessor(this));
+            if (instance == null) return (AudioProcessor = new AudioProcessor(this));
 
             return base.CreateAudioProcessor(instance);
 
         }
-
-        AudioProcessor p;
 
         /// <summary>
         /// Creates a default instance and reuses that for all threads.
@@ -76,7 +68,13 @@
         /// <returns>Returns the default instance.</returns>
         protected override IVstMidiProcessor CreateMidiProcessor(IVstMidiProcessor instance)
         {
-            if (instance == null) return new MidiProcessor(this);
+            if (instance == null)
+            {
+                MidiProcessor = new MidiProcessor(this);
+                if (AudioProcessor != null)
+                    AudioProcessor.SetUp();
+                return MidiProcessor;
+            }
 
             return base.CreateMidiProcessor(instance);
         }
@@ -91,7 +89,6 @@
 
         public IVstHostCommandStub _hostStub;
 
-        public event PropertyChangedEventHandler PropertyChanged;
 
         protected override IVstPluginEditor CreateEditor(IVstPluginEditor instance)
         {

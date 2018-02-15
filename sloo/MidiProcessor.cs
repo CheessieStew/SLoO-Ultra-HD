@@ -3,12 +3,17 @@
     using Jacobi.Vst.Core;
     using Jacobi.Vst.Framework;
     using sloo;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
 
     /// <summary>
     /// Manages incoming midi events and sents them to the <see cref="SampleManager"/>.
     /// </summary>
-    internal class MidiProcessor : IVstMidiProcessor
+    public class MidiProcessor : IVstMidiProcessor
     {
+        public event Action<byte> NoteOn;
+        public event Action<byte> NoteOff;
         private Plugin _plugin;
 
         /// <summary>
@@ -19,8 +24,6 @@
         {
             _plugin = plugin;
         }
-
-        #region IVstMidiProcessor Members
 
         /// <summary>
         /// Always returns 16.
@@ -48,7 +51,7 @@
 
                     if ((midiEvent.Data[0] & 0xF0) == 0x80)
                     {
-                        _plugin.SampleManager.ProcessNoteOffEvent(midiEvent.Data[1]);
+                        NoteOff?.Invoke(midiEvent.Data[1]);
                     }
 
                     if ((midiEvent.Data[0] & 0xF0) == 0x90)
@@ -56,17 +59,16 @@
                         // note on with velocity = 0 is a note off
                         if (midiEvent.Data[2] == 0)
                         {
-                            _plugin.SampleManager.ProcessNoteOffEvent(midiEvent.Data[1]);
+                            NoteOff?.Invoke(midiEvent.Data[1]);
                         }
                         else
                         {
-                            _plugin.SampleManager.ProcessNoteOnEvent(midiEvent.Data[1]);
+                            NoteOn?.Invoke(midiEvent.Data[1]);
                         }
                     }
                 }
             }
         }
 
-        #endregion
     }
 }

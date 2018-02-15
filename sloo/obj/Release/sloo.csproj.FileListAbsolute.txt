@@ -1,0 +1,17 @@
+D:\Git\SLoO-Ultra-HD\sloo\obj\Release\EditorControl.g.cs
+D:\Git\SLoO-Ultra-HD\sloo\obj\Release\sloo_MarkupCompile.cache
+D:\Git\SLoO-Ultra-HD\sloo\obj\Release\sloo_MarkupCompile.lref
+D:\Git\SLoO-Ultra-HD\sloo\bin\Release\sloo.dll
+D:\Git\SLoO-Ultra-HD\sloo\bin\Release\sloo.pdb
+D:\Git\SLoO-Ultra-HD\sloo\bin\Release\Jacobi.Vst.Core.dll
+D:\Git\SLoO-Ultra-HD\sloo\bin\Release\Jacobi.Vst.Framework.dll
+D:\Git\SLoO-Ultra-HD\sloo\bin\Release\Jacobi.Vst.Core.pdb
+D:\Git\SLoO-Ultra-HD\sloo\bin\Release\Jacobi.Vst.Core.xml
+D:\Git\SLoO-Ultra-HD\sloo\bin\Release\Jacobi.Vst.Framework.pdb
+D:\Git\SLoO-Ultra-HD\sloo\bin\Release\Jacobi.Vst.Framework.xml
+D:\Git\SLoO-Ultra-HD\sloo\obj\Release\EditorControl.baml
+D:\Git\SLoO-Ultra-HD\sloo\obj\Release\sloo.g.resources
+D:\Git\SLoO-Ultra-HD\sloo\obj\Release\sloo.csproj.CoreCompileInputs.cache
+D:\Git\SLoO-Ultra-HD\sloo\obj\Release\sloo.dll
+D:\Git\SLoO-Ultra-HD\sloo\obj\Release\sloo.pdb
+D:\Git\SLoO-Ultra-HD\sloo\obj\Release\sloo.csprojResolveAssemblyReference.cache
