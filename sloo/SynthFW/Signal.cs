@@ -59,7 +59,8 @@ namespace SynthFW
 
         public override int BlockSize => Buffer.GetLength(0);
 
-        public override T this[int sampleNr, int channel] => Buffer[sampleNr % BlockSize, channel % Channels];
+        public override T this[int sampleNr, int channel] =>Buffer[sampleNr % BlockSize, channel % Channels];
+        
 
         public override void NextBlock(byte blockNr)
         {

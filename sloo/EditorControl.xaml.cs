@@ -32,7 +32,7 @@ namespace sloo
             {
                 DataContext = value.Model;
                 _plugin = value;
-                Logger.UpdateLog += UpdateLog;
+                Logger.UpdateLog += str => Dispatcher.Invoke(() => UpdateLog(str));
                 Logger.LogLine("");
             }
         }

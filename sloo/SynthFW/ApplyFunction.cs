@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SynthFW
 {
-    public class ApplyFunction : DynamicSignal<double>
+    class ApplyFunction : DynamicSignal<double>
     {
         private Func<double, double> _function;
         public Signal<double> Input;        

@@ -16,9 +16,9 @@ namespace SynthFW
             Triangle
         }
         public Signal<double> Frequency;
-        public Signal<double> TriangleSkew = new ConstantSignal<double>(() => 0.5);
         public ConstantSignal<double> Amplitude = new ConstantSignal<double>(() => 1);
         public ConstantSignal<double> Base = new ConstantSignal<double>(() => 0);
+        public ConstantSignal<int> OctaveShift = new ConstantSignal<int>(() => 0);
 
         private MultiOscillatorSignalSource _out;
         public DynamicSignal<double> Out { get; private set; }
@@ -51,7 +51,7 @@ namespace SynthFW
             }
         }
 
-
+        
 
         public Oscillator(int channels, float sampleRate)
         {
@@ -71,15 +71,15 @@ namespace SynthFW
         private void GetBlock(double[,] buffer, byte blockNr)
         {
             Frequency.NextBlock(blockNr);
-            TriangleSkew.NextBlock(blockNr);
             Base.NextBlock(blockNr);
             Amplitude.NextBlock(blockNr);
+            OctaveShift.NextBlock(blockNr);
+            _guts.ForEach(g => g.OctaveShift = OctaveShift[0, 0]);
             for (int sample = 0; sample < buffer.GetLength(0); sample++)
             {
                 for (int channel = 0; channel < Channels; channel++)
                 {
                     _guts[channel].Frequency = Frequency[sample, channel];
-                    _guts[channel].TriangleSkew = TriangleSkew[sample, channel];
                     buffer[sample, channel] = _guts[channel].State * Amplitude[sample,channel] + Base[sample,channel];
                     Tick();
                 }
@@ -105,13 +105,14 @@ namespace SynthFW
 
         private class SimpleOscillator
         {
-            public double TriangleSkew;
             public WaveShape Shape;
             private double _angleDelta;
             private float _currentSampleRate;
+            private double _shiftedFrequency;
             private double _frequency;
             public double Angle { get; private set; }
 
+            public int OctaveShift;
             public double Frequency
             {
                 get => _frequency;
@@ -120,6 +121,7 @@ namespace SynthFW
                     if (_frequency != value && value != 0)
                     {
                         _frequency = value;
+                        _shiftedFrequency = value * Math.Pow(2, OctaveShift);
                         UpdateAngleDelta();
                     }
 
@@ -142,7 +144,7 @@ namespace SynthFW
 
             private void UpdateAngleDelta()
             {
-                double cyclesPerSample = _frequency / _currentSampleRate; // [2]
+                double cyclesPerSample = _shiftedFrequency / _currentSampleRate; // [2]
                 _angleDelta = cyclesPerSample * 2.0 * Math.PI;                                // [3]
             }
 
@@ -150,7 +152,7 @@ namespace SynthFW
             {
                 get
                 {
-                    if (_frequency <= 0)
+                    if (_shiftedFrequency <= 0)
                         return 0;
                     switch (Shape)
                     {
@@ -162,9 +164,8 @@ namespace SynthFW
                             return (int)(Angle / Math.PI) % 2 == 0 ? 1 : -1;
                         case WaveShape.Triangle:
                             var period = (int)(Angle / TwoPi);
-                            var res = (Angle / TwoPi - period * TwoPi) - TriangleSkew;
-                            res /= res < 0 ? TriangleSkew : (1 - TriangleSkew);
-                            return 2*Math.Abs(res) - 1;
+                            return (Angle - period * TwoPi) / Math.PI - 1;
+                            //return 2*Math.Abs(res) - 1;
                     }
                     throw new NotImplementedException();
                 }

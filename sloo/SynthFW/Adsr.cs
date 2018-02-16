@@ -47,8 +47,15 @@ namespace SynthFW
 
         private void GetBlock(double[,] output, byte blockNr)
         {
-            Triggers.NextBlock(blockNr);
-            Input.NextBlock(blockNr);
+             Attack.NextBlock(blockNr);
+             Sustain.NextBlock(blockNr);
+
+             AttackDuration.NextBlock(blockNr);
+             DecayDuration.NextBlock(blockNr);
+             ReleaseDuration.NextBlock(blockNr);
+             Triggers.NextBlock(blockNr);
+             Input.NextBlock(blockNr);
+            
             for(int channel = 0; channel < Triggers.Channels; channel++)
             {
                 if (!Triggers[0,channel] && Stages[channel].stage == AdsrStage.Sustain)

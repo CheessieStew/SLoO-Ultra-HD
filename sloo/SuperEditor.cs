@@ -11,7 +11,7 @@ namespace sloo
 {
     class SuperEditor : IVstPluginEditor
     {
-        private WpfControlWrapper<EditorControl> _editorCtrl = new WpfControlWrapper<EditorControl>(300, 300);
+        private WpfControlWrapper<EditorControl> _editorCtrl = new WpfControlWrapper<EditorControl>(600, 400);
         private Plugin _plugin;
         public SuperEditor(Plugin p)
         {

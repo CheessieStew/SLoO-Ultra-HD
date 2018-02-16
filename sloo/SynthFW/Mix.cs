@@ -48,7 +48,13 @@ namespace SynthFW
                     for (int sample = 0; sample < Buffer.GetLength(0); sample++)
                     {
                         for (int channel = 0; channel < Buffer.GetLength(1); channel++)
-                            Buffer[sample, channel] = Inputs.Sum(i => i[sample, 0]);
+                        {
+                            Buffer[sample, channel] = 0;
+                            for (int input = 0; input < Inputs.Count; input++)
+                            {
+                                Buffer[sample, channel] += Inputs[input][sample, 0] * Strengths[input][sample, 0];
+                            }
+                        }
                     }
                 else if (outChannels < Inputs[0].Channels && outChannels == 1)
                     for (int sample = 0; sample < Buffer.GetLength(0); sample++)
@@ -56,7 +62,10 @@ namespace SynthFW
                         Buffer[sample, 0] = 0;
                         for (int channel = 0; channel < Inputs[0].Channels; channel++)
                         {
-                            Buffer[sample, 0] += Inputs.Sum(i => i[sample, channel]);
+                            for (int input = 0; input < Inputs.Count; input++)
+                            {
+                                Buffer[sample, 0] += Inputs[input][sample, channel] * Strengths[input][sample, channel];
+                            }
                         }
                         
                     }                

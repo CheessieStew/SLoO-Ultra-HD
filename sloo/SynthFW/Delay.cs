@@ -11,7 +11,7 @@ namespace SynthFW
         public string Name = "Delay";
         public Signal<int> DelayLength = new ConstantSignal<int>(() => 3000);
 
-        private int BufferLen => _delayBuffer.Length;
+        private int _bufferLen;
         private double[] _delayBuffer;
         private int _tapInPosition;
         private double _tapOutPosition;
@@ -37,13 +37,14 @@ namespace SynthFW
             if (Input == null || PlaybackSpeed == null)
                 return;
             DelayLength.NextBlock(blockNr);
-            if (DelayLength[0,0] != _delayBuffer.Length)
+            if (DelayLength[0,0] != _bufferLen)
             {
-                var value = DelayLength[0, 0];
+                _bufferLen = Math.Max(1100, DelayLength[0, 0]);
                 _tapInPosition = 0;
                 _tapOutPosition = 0;
                 _tapOutPosition = 0;
-                _delayBuffer = new double[Math.Max(1100, value)];
+                _delayBuffer = new double[_bufferLen];
+                Logger.LogLine($"{Name} delay len set to {_bufferLen}");
             }
 
             SetOutBlock(output, blockNr);
@@ -59,12 +60,12 @@ namespace SynthFW
             for (int sample = 0; sample < output.GetLength(0); sample++)
             {
                 var blend = _tapOutPosition - (int)_tapOutPosition;
-                output[sample, 0] = _delayBuffer[((int)_tapOutPosition) % BufferLen] * (1 - blend)
-                    + _delayBuffer[((int)(_tapOutPosition + 0.5)) % BufferLen] * blend;
+                output[sample, 0] = _delayBuffer[((int)_tapOutPosition) % _bufferLen] * (1 - blend)
+                    + _delayBuffer[((int)(_tapOutPosition + 0.5)) % _bufferLen] * blend;
 
                 _tapOutPosition += PlaybackSpeed[sample, 0];
-                if (_tapOutPosition >= BufferLen)
-                    _tapOutPosition -= BufferLen;
+                if (_tapOutPosition >= _bufferLen)
+                    _tapOutPosition -= _bufferLen;
             }
         }
 
@@ -80,7 +81,7 @@ namespace SynthFW
             {
                 _delayBuffer[_tapInPosition] = Enumerable.Range(0, Input.Channels).Sum(c => Input[sample, c]) * Gain[sample, 0];
 
-                _tapInPosition = (_tapInPosition + 1) % BufferLen;
+                _tapInPosition = (_tapInPosition + 1) % _bufferLen;
             }
         }
 

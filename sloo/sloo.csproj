@@ -131,6 +131,7 @@
   <ItemGroup>
     <Compile Include="AudioProcessor.cs" />
     <Compile Include="SynthFW\Logger.cs" />
+    <Compile Include="SynthFW\LowPass.cs" />
     <Compile Include="SynthFW\MidiManager.cs" />
     <Compile Include="SynthFW\Mix.cs" />
     <Compile Include="SynthFW\Sum.cs" />
